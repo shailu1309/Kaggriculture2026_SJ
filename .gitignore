@@ -1,0 +1,28 @@
+# Secrets — never commit
+.env
+.env.*
+*.key
+kaggle.json
+
+# Episode logs and replays (regenerated; can get large)
+logs/
+replays/
+*.jsonl
+replay.json
+
+# Submission bundles
+submission.tar.gz
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# scratch
+.writetest
