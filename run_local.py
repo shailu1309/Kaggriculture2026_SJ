@@ -40,8 +40,31 @@ def wrap_with_logging(agent_fn, sink):
     return wrapped
 
 
+def preflight(opponent="random"):
+    """Load main.py by path, exactly as Kaggle does.
+
+    Kaggle resolves the *last callable defined in the file* as the agent, so a
+    helper defined below agent() silently becomes the submission. Importing
+    `agent` by name (as the scored runs below do) hides that entirely -- which
+    is how a broken v1 passed local testing and errored on submit. Never skip
+    this before submitting.
+    """
+    env = make("kaggriculture", debug=True)
+    env.run(["main.py", opponent])
+    s = env.steps[-1][0]
+    ok = s.status == "DONE"
+    print(f"preflight (loaded from main.py): status={s.status} reward={s.reward}")
+    if not ok:
+        print("  !! Kaggle would reject this. Is `agent` the LAST function in main.py?")
+    return ok
+
+
 def run(games, opponent, log):
     from main import agent as my_agent
+
+    if not preflight(opponent):
+        print("\nAborting scored runs -- fix the preflight failure first.")
+        return
 
     os.makedirs(LOG_DIR, exist_ok=True)
     results = []

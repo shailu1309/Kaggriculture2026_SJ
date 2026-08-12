@@ -34,10 +34,6 @@ LAND_COSTS = [1000, 2000, 4000]
 QUADRANT_ORDER = ["NE", "SW", "SE"]
 
 
-def quadrant_of(x, y, half):
-    return ("N" if y < half else "S") + ("W" if x < half else "E")
-
-
 def step_toward(ux, uy, tx, ty):
     """One orthogonal step from (ux,uy) toward (tx,ty)."""
     if tx > ux:
